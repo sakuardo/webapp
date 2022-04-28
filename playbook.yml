@@ -1,0 +1,82 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    server_name: "{{ ansible_default_ipv4.address }}"
+    document_root: /usr/share/nginx/html
+  roles:
+  - ansible-hardening  
+  tasks:
+
+    - name: Add grafana repository
+      yum_repository:
+        name: grafana
+        description: grafana repo
+        baseurl: https://packages.grafana.com/oss/rpm
+        gpgcheck: yes
+        gpgkey: https://packages.grafana.com/gpg.key
+        sslverify: yes
+        sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+        enabled: yes
+
+    - name: Install Grafana
+      yum:
+        name: grafana
+        state: latest
+          
+    - name: Allow traffic in default zone for Grafana port 3000
+      firewalld:
+        port: 3000/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: latest
+
+    - name: Allow traffic in default zone for http service
+      firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+    - name: Allow traffic in default zone for https service
+      firewalld:
+        service: https
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+    - name: Allow SELinux for Grafana and Nginx
+      command: /usr/sbin/setsebool -P httpd_can_network_connect 1
+
+    - name: Copy nginx.conf with owner and permissions
+      copy:
+        src: files/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Copy grafana.ini with owner and permissions
+      copy:
+        src: files/grafana.ini
+        dest: /etc/grafana/grafana.ini
+        owner: root
+        group: grafana
+        mode: '0640'
+
+    - name: Restart grafana
+      service:
+        name: grafana-server
+        enabled: yes
+        state: restarted  
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        enabled: yes
+        state: restarted
