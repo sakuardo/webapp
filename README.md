@@ -1,4 +1,3 @@
 # webapp
-test app using NGINX - GRFANA - PROMETHEUS
+test app using NGINX - GRAFANA - PROMETHEUS
 
-change it
