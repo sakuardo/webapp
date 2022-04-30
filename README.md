@@ -37,6 +37,8 @@ What is working?
 
     Ansible will allow the webserver with SELinux enabled 
     
+    Ansible will create and copy files for /app and allow it on SELinux
+    
 
 How does it work? 
 
@@ -53,6 +55,8 @@ How does it work?
     http://localhost:8080 
 
     http://localhost:8080/grafana/ 
+    
+    http://localhost:8080/app/
 
  
 
