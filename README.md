@@ -57,6 +57,8 @@ How does it work?
     http://localhost:8080/grafana/ 
     
     http://localhost:8080/app/
+    
+    http://localhost:9090/  <-- for prometheus.. didnt have time to integrate it with nginx
 
  
 
