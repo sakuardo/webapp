@@ -39,6 +39,8 @@ What is working?
     
     Ansible will create and copy files for /app and allow it on SELinux
     
+    Ansible will install Prometheus and configure it, allowing it with SElinux
+    
 
 How does it work? 
 
