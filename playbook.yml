@@ -88,11 +88,11 @@
     - name: Relabel /usr/share/nginx/html/app for SElinx to work after reboot
       command: /sbin/restorecon -Rv /usr/share/nginx/html/app
 
-    #- name: Download Prometheus with check (sha256)
-    #  get_url:
-    #    url: https://github.com/prometheus/prometheus/releases/download/v2.35.0/prometheus-2.35.0.linux-amd64.tar.gz
-    #    dest: /root/prometheus-2.35.0.linux-amd64.tar.gz
-    #    checksum: sha256:e4546960688d1c85530ec3a93e109d15b540f3251e1f4736d0d9735e1e857faf
+    - name: Download Prometheus with check (sha256)
+      get_url:
+        url: https://github.com/prometheus/prometheus/releases/download/v2.35.0/prometheus-2.35.0.linux-amd64.tar.gz
+        dest: /root/prometheus-2.35.0.linux-amd64.tar.gz
+        checksum: sha256:e4546960688d1c85530ec3a93e109d15b540f3251e1f4736d0d9735e1e857faf
     
     - name: Ensure group "Prometheus" exists
       group:
@@ -123,8 +123,9 @@
 
     - name: Extract prometheus.tgz into /var/lib/prometheus
       unarchive:
-        src: files/prometheus-2.35.0.linux-amd64.tar.gz
+        src: /root/prometheus-2.35.0.linux-amd64.tar.gz
         dest: /var/lib/prometheus
+        remote_src: yes
 
     - name: Recursively change ownership of a Prometheus config files
       file:
